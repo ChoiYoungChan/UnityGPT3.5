@@ -6,10 +6,16 @@ using UnityEngine.UI;
 
 public class PlayLayer : BaseLayerTemplate
 {
-    [SerializeField] Button _settingBtn, _backBtn;
-    [SerializeField] GameObject _tutorial, _cover;
+    [SerializeField] Button _backBtn, _enterBtn, _regenerateBtn;
+    [SerializeField] Text _outputText;
+    [SerializeField] InputField _inputText;
+    [SerializeField] GameObject _textListObject;
+    [SerializeField] Transform _initializePos;
 
-    private bool _canTouch;
+    private void Start()
+    {
+         
+    }
 
     public virtual void Awake()
     {
@@ -21,34 +27,40 @@ public class PlayLayer : BaseLayerTemplate
     /// </summary>
     public virtual void Initialize()
     {
-        if (CacheData.Instance.IsFirstOpen) {
-            CacheData.Instance.Tutorial = false;
-            _tutorial.SetActive(true);
-            CacheData.Instance.IsFirstOpen = false;
-        }
-
-        _settingBtn.onClick.AddListener(()=> { DialogManager.Instance.OpenDialog(DialogManager.DialogKey.DialogKey_Setting);});
         _backBtn.onClick.AddListener(() => {
             LayerManager.Instance.MoveLayer(LayerManager.LayerKey.LayerKey_Top);
+        });
+
+        _enterBtn.onClick.AddListener(()=> {
+            
+        });
+
+        _regenerateBtn.onClick.AddListener(() => {
+
         });
     }
 
     public virtual void OnEnable()
     {
-        //SoundManager.Instance.Play("bgm");
-        _canTouch = false;
 
     }
 
-    private void GeterateObject()
+    public void SetTalk()
     {
 
     }
 
-    /// <summary>
-    /// MoveNextlayer
-    /// </summary>
-    public void MoveLayer()
+    public void GetTalk()
+    {
+
+    }
+
+    public void OnClickReGenerateAnswerButton()
+    {
+
+    }
+
+    public void OnClickEnterButton()
     {
 
     }
