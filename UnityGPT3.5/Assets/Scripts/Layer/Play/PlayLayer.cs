@@ -1,3 +1,4 @@
+using openAI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,15 +7,18 @@ using UnityEngine.UI;
 
 public class PlayLayer : BaseLayerTemplate
 {
-    [SerializeField] Button _backBtn, _enterBtn, _regenerateBtn;
-    [SerializeField] Text _outputText;
-    [SerializeField] InputField _inputText;
-    [SerializeField] GameObject _textListObject;
-    [SerializeField] Transform _initializePos;
+    [SerializeField] Button backBtn, enterBtn, regenerateBtn;
+    [SerializeField] Text outputText;
+    [SerializeField] InputField inputText;
+    [SerializeField] GameObject initializePos;
+
+    private string answerText = "";
+    private GameObject textlistObject;
 
     private void Start()
     {
-         
+        textlistObject = outputText.gameObject;
+        outputText.gameObject.SetActive(false);
     }
 
     public virtual void Awake()
@@ -27,15 +31,13 @@ public class PlayLayer : BaseLayerTemplate
     /// </summary>
     public virtual void Initialize()
     {
-        _backBtn.onClick.AddListener(() => {
+        backBtn.onClick.AddListener(() => {
             LayerManager.Instance.MoveLayer(LayerManager.LayerKey.LayerKey_Top);
         });
 
-        _enterBtn.onClick.AddListener(()=> {
-            
-        });
+        enterBtn.onClick.AddListener(OnClickEnterButton);
 
-        _regenerateBtn.onClick.AddListener(() => {
+        regenerateBtn.onClick.AddListener(() => {
 
         });
     }
@@ -47,12 +49,10 @@ public class PlayLayer : BaseLayerTemplate
 
     public void SetTalk()
     {
+        if (answerText == "") OnClickEnterButton();
 
-    }
-
-    public void GetTalk()
-    {
-
+        GameObject _object = Instantiate(textlistObject, initializePos.transform, initializePos);
+        _object.GetComponent<Text>().text = answerText;
     }
 
     public void OnClickReGenerateAnswerButton()
@@ -62,6 +62,7 @@ public class PlayLayer : BaseLayerTemplate
 
     public void OnClickEnterButton()
     {
-
+        answerText = ChatGPTConnection.Instance.GetAPIResponse(inputText.text).ToString();
+        SetTalk();
     }
 }
