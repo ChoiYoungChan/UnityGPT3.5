@@ -10,15 +10,16 @@ namespace openAI
 {
     public class ChatGPTConnection : SingletonClass<ChatGPTConnection>
     {
-        const string GPT_API_KEY = "";
-        const string API_END_POINT = "";
+        const string GPT_API_KEY = "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";
+        const string API_END_POINT = "https://api.openai.com/v1/completions";
 
+        string answerText = "";
         /// <summary>
         /// send question text data and wait response, return answer json data
         /// </summary>
         /// <param name="prompt"></param>
         /// <returns></returns>
-        public async UniTask<APIResponseData> GetAPIResponse(string prompt)
+        public async UniTask GetAPIResponse(string prompt)
         {
             APIRequestData _requestData = new()
             {
@@ -39,7 +40,7 @@ namespace openAI
                 _request.uploadHandler = new UploadHandlerRaw(_data);
                 _request.downloadHandler = new DownloadHandlerBuffer();
                 _request.SetRequestHeader("Content-Type", "application/json");
-                _request.SetRequestHeader("Authorization", "Bearer" + GPT_API_KEY);
+                _request.SetRequestHeader("Authorization", "Bearer " + GPT_API_KEY);
                 await _request.SendWebRequest();
 
                 switch(_request.result)
@@ -50,6 +51,7 @@ namespace openAI
                     case UnityWebRequest.Result.Success:
                         Debug.Log("### Success");
                         _jsonString = _request.downloadHandler.text;
+                        Debug.Log("### "+ _jsonString);
                         break;
                     case UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.DataProcessingError :
                         Debug.LogError("### Error");
@@ -59,7 +61,13 @@ namespace openAI
                 }
             }
 
-            return JsonConvert.DeserializeObject<APIResponseData>(_jsonString);
+            APIResponseData _json = JsonConvert.DeserializeObject<APIResponseData>(_jsonString);
+            answerText = _json.Choices[0].Text;
+        }
+
+        public string GetAnswerData()
+        {
+            return answerText;
         }
     }
 }

@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class BaseDialogTemplate : SingletonClass<BaseDialogTemplate>
 {
-    public virtual void Awake()
-    {
-        Initialize();
-    }
 
     /// <summary>
     /// Initialize

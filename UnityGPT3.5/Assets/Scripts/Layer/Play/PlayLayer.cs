@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using openAI;
 using System;
 using System.Collections;
@@ -17,19 +18,13 @@ public class PlayLayer : BaseLayerTemplate
 
     private void Start()
     {
-        textlistObject = outputText.gameObject;
-        outputText.gameObject.SetActive(false);
-    }
-
-    public virtual void Awake()
-    {
         Initialize();
     }
 
     /// <summary>
     /// Initialize
     /// </summary>
-    public virtual void Initialize()
+    public override void Initialize()
     {
         backBtn.onClick.AddListener(() => {
             LayerManager.Instance.MoveLayer(LayerManager.LayerKey.LayerKey_Top);
@@ -37,32 +32,23 @@ public class PlayLayer : BaseLayerTemplate
 
         enterBtn.onClick.AddListener(OnClickEnterButton);
 
-        regenerateBtn.onClick.AddListener(() => {
-
-        });
-    }
-
-    public virtual void OnEnable()
-    {
-
-    }
-
-    public void SetTalk()
-    {
-        if (answerText == "") OnClickEnterButton();
-
-        GameObject _object = Instantiate(textlistObject, initializePos.transform, initializePos);
-        _object.GetComponent<Text>().text = answerText;
-    }
-
-    public void OnClickReGenerateAnswerButton()
-    {
-
     }
 
     public void OnClickEnterButton()
     {
-        answerText = ChatGPTConnection.Instance.GetAPIResponse(inputText.text).ToString();
-        SetTalk();
+        _ = GetAnswerData();
+        answerText = ChatGPTConnection.Instance.GetAnswerData();
+    }
+
+    private async UniTask GetAnswerData()
+    {
+       await ChatGPTConnection.Instance.GetAPIResponse(inputText.text);
+
+        answerText = ChatGPTConnection.Instance.GetAnswerData();
+
+        if (answerText == "") Debug.LogError("### Text is Empty");
+        if (answerText.StartsWith("\n\n")) answerText = answerText.Substring(2);
+
+        outputText.text = answerText;
     }
 }

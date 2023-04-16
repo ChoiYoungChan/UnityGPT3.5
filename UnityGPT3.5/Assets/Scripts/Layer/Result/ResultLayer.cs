@@ -9,14 +9,11 @@ public class ResultLayer : BaseLayerTemplate
     [SerializeField] Image _resultImg;
     [SerializeField] Sprite[] _resultSprite;
 
-    public virtual void Awake()
+    private void Start()
     {
         _nextBtn.onClick.AddListener(OnClickNextButton);
         _backBtn.onClick.AddListener(OnClickBackButton);
-    }
 
-    public virtual void OnEnable()
-    {
         _nextBtn.gameObject.SetActive(false);
 
         ShowResultImage();

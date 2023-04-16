@@ -7,7 +7,7 @@ public class TopLayer : BaseLayerTemplate
 {
     [SerializeField] Button _startBtn;
 
-    public virtual void Awake()
+    private void Start()
     {
         _startBtn.onClick.AddListener(OnClickStartButton);
     }
