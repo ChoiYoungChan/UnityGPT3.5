@@ -10,7 +10,7 @@ namespace openAI
 {
     public class ChatGPTConnection : SingletonClass<ChatGPTConnection>
     {
-        const string GPT_API_KEY = "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";
+        const string GPT_API_KEY = "input Key";
         const string API_END_POINT = "https://api.openai.com/v1/completions";
 
         string answerText = "";
